@@ -12,9 +12,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import TopMenu from '@/components/menu/topMenu.vue'
 import FileUploadInput from '@/components/input/fileUploadInput.vue'
+import utils from '@/utils'
 
 export default defineComponent({
   components: {
@@ -22,6 +23,10 @@ export default defineComponent({
     FileUploadInput
   },
   setup () {
+    onMounted(() => {
+      utils.Token.checkToken()
+    })
+
     return {
     }
   }
