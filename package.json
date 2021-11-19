@@ -9,6 +9,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.24.0",
+    "element-plus": "^1.0.2-beta.28",
+    "jwt-decode": "^3.1.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -35,6 +38,7 @@
     "eslint-plugin-vue": "^7.0.0",
     "lint-staged": "^9.5.0",
     "typescript": "~4.1.5",
+    "vue-cli-plugin-element-plus": "0.0.13",
     "vue-jest": "^5.0.0-0"
   },
   "gitHooks": {
@@ -44,6 +48,13 @@
     "*.{js,jsx,vue,ts,tsx}": [
       "vue-cli-service lint",
       "git add"
+    ]
+  },
+  "rules": {
+    "indent": "off",
+    "@typescript-eslint/indent": [
+      "error",
+      2
     ]
   }
 }
