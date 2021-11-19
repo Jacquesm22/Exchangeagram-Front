@@ -4,6 +4,8 @@ import config from '../config'
 import utils from '@/utils'
 import { ElMessage } from 'element-plus'
 import AuthResponseInterfaceDTO from '@/classes/interface/dto/authResponseInterface.dto'
+import SignUpFormInterface from '@/classes/interface/signUpFormInterface'
+import UserSignupResponseInterfaceDTO from '@/classes/interface/dto/userSignupResponseInterface.dto'
 
 export default {
   async userCredentialLogin (data: LoginFormInterface): Promise<boolean> {
@@ -21,6 +23,25 @@ export default {
       .catch(() => {
         utils.Token.remove()
         ElMessage.error('Oops. Bad Credentials. Please try again.')
+        return false
+      })
+  },
+  async userSignUp (data: SignUpFormInterface): Promise<boolean> {
+    return await config.axiosInstance.post(Consts.Api.User.Register(), data)
+      .then((response: any) => {
+        if (!response) return false
+        if (!response.data) return false
+
+        const responseData = response.data as UserSignupResponseInterfaceDTO
+        if (!responseData.success) {
+          ElMessage.error(responseData.message)
+          return false
+        }
+
+        return true
+      })
+      .catch(() => {
+        ElMessage.error('Sorry something went wrong. Please try again.')
         return false
       })
   }

@@ -1,6 +1,6 @@
 <template>
-  <el-card class="login-form-wrapper" v-loading="loading">
-    <div class="login-form-heading">Exchangeagram</div>
+  <el-card class="signup-form-wrapper" v-loading="loading">
+    <div class="signup-form-heading">Exchangeagram</div>
     <el-form
       ref="formRef"
       :model="form"
@@ -14,7 +14,16 @@
           v-model="form.username"
           autocomplete="off"
           placeholder="Username"
-          @keydown.enter="loginButtonClick()"
+          @keydown.enter="signUpButtonClick()"
+        />
+      </el-form-item>
+      <!-- email -->
+      <el-form-item label="Email" prop="email">
+        <el-input
+          v-model="form.email"
+          autocomplete="off"
+          placeholder="Email"
+          @keydown.enter="signUpButtonClick()"
         />
       </el-form-item>
       <!-- password -->
@@ -24,26 +33,26 @@
           type="password"
           autocomplete="off"
           placeholder="Password"
-          @keydown.enter="loginButtonClick()"
+          @keydown.enter="signUpButtonClick()"
         />
       </el-form-item>
       <!-- action buttons -->
       <el-form-item>
+        <!-- signup button -->
+        <el-button
+          class="signup-button"
+          type="primary"
+          @click="signUpButtonClick()"
+        >
+          Sign Up
+        </el-button>
         <!-- login button -->
         <el-button
           class="login-button"
-          type="primary"
+          type="text"
           @click="loginButtonClick()"
         >
-          Login
-        </el-button>
-        <!-- sign up button -->
-        <el-button
-          class="signup-button"
-          type="text"
-          @click="signUpButtonClick()"
-        >
-          Don't have an account? Sign up.
+          Already have an account? Login.
         </el-button>
       </el-form-item>
     </el-form>
@@ -52,16 +61,17 @@
 
 <script lang="ts">
 import { defineComponent, Ref, ref } from 'vue'
-import LoginFormInterface from '@/classes/interface/loginFormInterface'
 import { useRouter } from 'vue-router'
 import AuthClient from '@/http/client/authClient'
+import SignUpFormInterface from '@/classes/interface/signUpFormInterface'
 
 export default defineComponent({
   setup () {
     const router = useRouter()
     const formRef: Ref = ref(null)
-    const form: Ref<LoginFormInterface> = ref({
+    const form: Ref<SignUpFormInterface> = ref({
       username: '',
+      email: '',
       password: ''
     })
     const loading: Ref<boolean> = ref(false)
@@ -80,23 +90,35 @@ export default defineComponent({
           message: 'Please input password',
           trigger: 'blur'
         }
+      ],
+      email: [
+        {
+          required: true,
+          message: 'Please input email address',
+          trigger: 'blur'
+        },
+        {
+          type: 'email',
+          message: 'Please input correct email address',
+          trigger: ['blur', 'change']
+        }
       ]
     })
 
-    async function loginButtonClick () {
+    async function signUpButtonClick () {
       const formValid = await formRef.value.validate()
       if (!formValid) return
 
       loading.value = true
-      const response: boolean = await AuthClient.userCredentialLogin(form.value)
+      const response: boolean = await AuthClient.userSignUp(form.value)
       loading.value = false
       if (response) {
-        router.push({ name: 'Home' })
+        router.push({ name: 'Login' })
       }
     }
 
-    async function signUpButtonClick () {
-      router.push({ name: 'SignUp' })
+    async function loginButtonClick () {
+      router.push({ name: 'Login' })
     }
 
     return {
@@ -112,7 +134,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.login-form-wrapper {
+.signup-form-wrapper {
   width: 100%;
   max-width: 450px;
   height: auto;
@@ -122,7 +144,7 @@ export default defineComponent({
   border-radius: 10px;
 }
 
-.login-form-heading {
+.signup-form-heading {
   font-size: 35px;
   font-weight: bold;
   color: #000;

@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import jwtDecode, { JwtDecodeOptions } from 'jwt-decode'
 import { Consts } from '@/utils/consts'
 import router from '@/router'
 import utils from '.'
@@ -31,6 +31,8 @@ function expired (): boolean {
   if (!token) return true
 
   const decoded: any = jwtDecode(token)
+  if (!decoded) return true
+
   const expiresAt = decoded.exp
   if (!expiresAt) return true
   return Date.now() >= expiresAt * 1000

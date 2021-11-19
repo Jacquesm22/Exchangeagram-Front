@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Splash from '../views/Splash.vue'
 import Login from '../views/Login.vue'
+import SignUp from '../views/SignUp.vue'
 import Home from '../views/Home.vue'
 import Photos from '../views/Photos.vue'
 
@@ -14,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/Login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/SignUp',
+    name: 'SignUp',
+    component: SignUp
   },
   {
     path: '/Home',
